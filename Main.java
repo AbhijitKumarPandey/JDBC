@@ -1,45 +1,48 @@
-import java.sql.*;
-public class Main {
-    public static void main(String[] args) throws ClassNotFoundException {
-        String url = "jdbc:mysql://localhost:3306/college";
-        String username = "root";
-        String Password = "abhijit@123";
-        String query = "select * from employees";
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            System.out.println("Driver Loaded Successfully !!!!");
-        } catch (ClassNotFoundException e) {
-            System.out.println(e.getMessage());
 
+
+import javax.xml.transform.Result;
+import java.sql.*;
+
+public class Main {
+    public static void main(String[] args) throws ClassNotFoundException{
+        String url ="jdbc:mysql://localhost:3306/hp";
+        String username = "root";
+        String password = "abhijit@123";
+        String query = "select * from employees where name   ? " ;
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            System.out.println("Drivers loaded successfully ");
+        }catch(ClassNotFoundException e){
+            System.out.println(e.getMessage());
         }
-        try {
-            Connection con = DriverManager.getConnection(url, username, Password);
-            System.out.println("Connection Establish Successfully");
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
-            while(rs.next()){
-                int id = rs.getInt("id");
-                String name = rs.getString("name");
-                String job_title = rs.getString("job_title");
-                double salary = rs.getDouble("salary");
-                System.out.println();
-                System.out.println("=============");
-                System.out.println(" Id " + id);
-                System.out.println(" Name " + name);
-                System.out.println(" Job_title " + job_title);
-                System.out.println(" Salary " + salary);
+        try{
+            Connection con = DriverManager.getConnection(url,username,password);
+            System.out.println("Connection Established Successfully ");
+
+            PreparedStatement preparedStatement = con.prepareStatement(query);
+            preparedStatement.setString(1,"Abhijit" );
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while(resultSet.next()){
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                double Salary = resultSet.getDouble("Salary") ;
+
+                System.out.println(" id " + id );
+                System.out.println("name" + name);
+                System.out.println("Salary" + Salary);
+
             }
-            rs.close();
-            stmt.close();
+            resultSet.close();
+            preparedStatement.close();
             con.close();
             System.out.println();
-            System.out.println("Connection close successfully !!!!!!");
-        } catch (Exception e) {
+            System.out.println("Connection closed Successfully");
+
+            }catch(SQLException e){
             System.out.println(e.getMessage());
+        }
 
         }
     }
-
-
-}
-
